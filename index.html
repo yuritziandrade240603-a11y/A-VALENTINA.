@@ -1,241 +1,37 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NODO | Tienda en línea</title>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NODO | Tienda en línea</title>
 <style>
-:root{--yellow:#ffd629;--black:#171717;--white:#fff;--gray:#f5f5f5}
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;color:var(--black);background:white}
-header{background:var(--yellow);padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.logo{font-size:32px;font-weight:900;letter-spacing:5px}
-header button,.btn{border:0;border-radius:8px;padding:12px 16px;font-weight:bold;cursor:pointer}
-.cart-button{background:var(--black);color:white}
-.hero{padding:42px 5%;background:#f7f7f7}
-.hero h1{font-size:clamp(32px,5vw,54px);margin:12px 0}
-.hero p{line-height:1.6;max-width:560px}
-main{padding:25px 5%}
-.categories{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 26px}
-.categories button{background:white;border:1px solid #ddd;border-radius:30px;padding:10px 16px;cursor:pointer}
-.categories button.active{background:var(--black);color:white}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:18px}
-.card{border:1px solid #eee;border-radius:14px;overflow:hidden;background:white}
-.product-art{height:190px;display:grid;place-items:center;background:var(--gray);font-size:68px}
-.card-content{padding:14px}
-.card h3{margin:4px 0 8px}
-.price{font-weight:800;font-size:20px}
-.muted{color:#666;font-size:13px}
-.swatches{display:flex;gap:9px;margin:12px 0}
-.swatch{width:25px;height:25px;border-radius:50%;border:2px solid #ddd;cursor:pointer}
-.swatch.selected{outline:2px solid #171717;outline-offset:2px}
-.add{width:100%;background:var(--yellow);margin-top:8px}
-.panel{margin-top:28px;padding:22px;border:1px solid #e5e5e5;border-radius:14px}
-.panel h2{margin-top:0}
-input,select,textarea{width:100%;padding:12px;margin:6px 0 14px;border:1px solid #ccc;border-radius:8px;font:inherit}
-label{font-weight:bold;font-size:14px}
-fieldset{border:1px solid #ddd;border-radius:10px;margin:12px 0;padding:14px}
-fieldset label{display:block;font-weight:normal;margin:10px 0}
-fieldset input{width:auto;margin:0 8px 0 0}
-.line{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:10px 0}
-.small-button{padding:5px 10px;border:1px solid #ddd;background:white;border-radius:6px;cursor:pointer}
-.checkout{background:var(--black);color:white;width:100%;margin-top:12px}
-footer{text-align:center;padding:25px;background:var(--yellow);margin-top:35px}
-.notice{background:#fff8d9;padding:12px;border-radius:8px;font-size:13px;line-height:1.5}
-.hidden{display:none}
-</style>
-</head>
-<body>
-<header>
-  <div>
-    <div class="logo">NODO</div>
-    <div style="font-size:12px">TU ESTILO, TU NODO</div>
-  </div>
-  <button class="cart-button" onclick="document.getElementById('carrito').scrollIntoView({behavior:'smooth'})">
-    🛒 Carrito (<span id="cartCount">0</span>)
-  </button>
-</header>
-
-<section class="hero">
-  <small>BIENVENIDA A NODO</small>
-  <h1>Encuentra eso que va contigo.</h1>
-  <p>Explora nuestra colección, elige tus colores favoritos y recibe tu pedido o recógelo en tu punto de entrega.</p>
-  <button class="btn" style="background:var(--yellow)" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Explorar productos</button>
-</section>
-
-<main>
-  <section id="catalogo">
-    <h2>Compra por categoría</h2>
-    <div class="categories" id="categories"></div>
-    <div class="grid" id="products"></div>
-  </section>
-
-  <section class="panel" id="carrito">
-    <h2>🛒 Tu carrito</h2>
-    <div id="cartItems">Todavía no agregas productos.</div>
-    <div class="line"><strong>Total</strong><strong id="total">$0.00 MXN</strong></div>
-  </section>
-
-  <section class="panel" id="checkout">
-    <h2>Finaliza tu pedido</h2>
-    <p class="muted">Completa tus datos para preparar tu pedido.</p>
-    <label for="customer">Nombre completo</label>
-    <input id="customer" autocomplete="name" placeholder="Tu nombre">
-
-    <label for="phone">Teléfono / WhatsApp</label>
-    <input id="phone" autocomplete="tel" placeholder="Tu número de contacto">
-
-    <fieldset>
-      <legend><strong>¿Cómo quieres recibir tu pedido?</strong></legend>
-      <label><input type="radio" name="delivery" value="Punto de entrega" checked onchange="toggleAddress()"> Recoger en punto de entrega</label>
-      <label><input type="radio" name="delivery" value="Envío a domicilio" onchange="toggleAddress()"> Envío a domicilio</label>
-    </fieldset>
-
-    <div id="pickupFields">
-      <label for="pickup">Punto de entrega</label>
-      <select id="pickup">
-        <option value="San Mateo">San Mateo</option>
-        <option value="Santa Rosa">Santa Rosa</option>
-        <option value="San Bartolo">San Bartolo</option>
-        <option value="Cuajimalpa">Cuajimalpa</option>
-        <option value="El Yaqui">El Yaqui</option>
-        <option value="El Limbo Santa Fe">El Limbo Santa Fe</option>
-      </select>
-    </div>
-
-    <div id="addressFields" class="hidden">
-      <label for="postal">Código postal</label>
-      <input id="postal" inputmode="numeric" maxlength="5" placeholder="Ej. 05600" oninput="findZone()">
-      <p class="muted" id="zoneResult">Escribe tu código postal para revisar la zona.</p>
-      <label for="address">Calle, número, colonia y referencias</label>
-      <textarea id="address" rows="3" placeholder="Escribe la dirección completa"></textarea>
-    </div>
-
-    <label for="deliveryDate">Fecha o día preferido para recibirlo</label>
-    <select id="deliveryDate">
-      <option value="Por confirmar">Por confirmar con NODO</option>
-      <option value="Sábado">Sábado</option>
-      <option value="Domingo">Domingo</option>
-    </select>
-
-    <fieldset>
-      <legend><strong>Método de pago</strong></legend>
-      <label><input type="radio" name="payment" value="Efectivo" checked> Efectivo al recibir o recoger</label>
-      <label><input type="radio" name="payment" value="Transferencia"> Transferencia bancaria</label>
-      <label><input type="radio" name="payment" value="Tarjeta (por habilitar)"> Tarjeta bancaria (próximamente)</label>
-    </fieldset>
-
-    <div class="notice">Las zonas, fechas, costos de envío y disponibilidad se confirmarán antes de completar el pedido. Los pagos con tarjeta todavía no están habilitados en esta versión.</div>
-    <button class="btn checkout" onclick="placeOrder()">Preparar pedido por WhatsApp</button>
-  </section>
-</main>
-
-<footer>
-  <strong>NODO</strong><br>
-  <span>Gracias por comprar en nuestro negocio 💛</span>
-</footer>
-
+:root{--yellow:#ffd629;--ink:#191919;--gray:#f7f7f7}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--ink)}header{background:var(--yellow);padding:20px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px}.logo{font-size:34px;font-weight:900;letter-spacing:5px}.tag{font-size:11px;letter-spacing:2px}button{font:inherit;cursor:pointer}.cart-btn,.dark-btn{background:var(--ink);color:#fff;border:0;border-radius:12px;padding:13px 17px;font-weight:700}.hero{padding:48px 5%;background:#fff9dc}.hero h1{font-size:clamp(32px,5vw,56px);max-width:670px;margin:10px 0}.hero p{line-height:1.6;max-width:590px}.yellow-btn{background:var(--yellow);border:0;border-radius:12px;padding:13px 18px;font-weight:bold}main{padding:28px 5%;max-width:1400px;margin:auto}.categories{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0 25px}.categories button{border:1px solid #ddd;background:white;padding:11px 15px;border-radius:30px}.categories button.active{background:var(--ink);color:#fff;border-color:var(--ink)}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}.card{border:1px solid #eee;border-radius:18px;overflow:hidden;box-shadow:0 5px 20px #00000008}.art{aspect-ratio:1;background:#f8f4e8;display:grid;place-items:center;font-size:64px;overflow:hidden}.art img{width:100%;height:100%;object-fit:cover}.content{padding:15px}.muted{color:#686868;font-size:13px;line-height:1.5}.content h3{margin:7px 0}.price{font-size:21px;font-weight:800}.swatches{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.swatch{width:27px;height:27px;border-radius:50%;border:2px solid #bbb}.swatch.selected{outline:2px solid #111;outline-offset:3px}.add{width:100%;padding:12px;border:0;border-radius:10px;background:var(--yellow);font-weight:bold}.add:disabled{background:#eee;color:#888;cursor:not-allowed}.panel{border:1px solid #e5e5e5;border-radius:17px;padding:22px;margin-top:30px}.line{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #eee}.qty{border:1px solid #ddd;background:white;padding:6px 10px;border-radius:7px}.field{margin:15px 0}label{display:block;font-weight:bold;font-size:14px;margin-bottom:7px}input:not([type=radio]),select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:9px;font:inherit}fieldset{border:1px solid #ddd;border-radius:12px;margin:15px 0;padding:14px}fieldset label{font-weight:normal;margin:10px 0}fieldset input{margin-right:8px}.hidden{display:none}.notice{background:#fff7d7;padding:14px;border-radius:10px;font-size:13px;line-height:1.6}.checkout{width:100%;margin-top:15px}footer{background:var(--yellow);text-align:center;padding:28px;margin-top:30px}.empty{padding:25px;color:#777;text-align:center}@media(max-width:480px){.logo{font-size:27px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.content{padding:10px}.art{font-size:46px}.content h3{font-size:15px}.price{font-size:18px}.cart-btn{padding:10px}}
+</style></head><body>
+<header><div><div class="logo">NODO</div><div class="tag">TU ESTILO, TU NODO</div></div><button class="cart-btn" onclick="document.getElementById('carrito').scrollIntoView({behavior:'smooth'})">🛒 Carrito (<span id="cartCount">0</span>)</button></header>
+<section class="hero"><small>BIENVENIDA A NODO ✨</small><h1>Encuentra eso que va contigo.</h1><p>Detalles que enamoran, accesorios y mucho más. Explora, elige tu color favorito y arma tu pedido.</p><button class="yellow-btn" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Ver catálogo ↓</button></section>
+<main><section id="catalogo"><h2>Compra por categoría</h2><div id="categories" class="categories"></div><div id="products" class="grid"></div></section>
+<section class="panel" id="carrito"><h2>🛒 Tu carrito</h2><div id="cartItems">Todavía no agregas productos.</div><div class="line"><strong>Total de productos</strong><strong id="total">$0.00</strong></div></section>
+<section class="panel"><h2>Finaliza tu pedido 💛</h2><p class="muted">Completa tus datos y envíanos tu pedido por WhatsApp.</p><div class="field"><label for="customer">Nombre completo</label><input id="customer" autocomplete="name" placeholder="Tu nombre"></div><div class="field"><label for="phone">Teléfono / WhatsApp</label><input id="phone" type="tel" autocomplete="tel" placeholder="Tu número"></div>
+<fieldset><legend><strong>Entrega</strong></legend><label><input type="radio" name="delivery" value="Punto de entrega" checked onchange="toggleAddress()">Recoger en punto de entrega</label><label><input type="radio" name="delivery" value="Envío a domicilio" onchange="toggleAddress()">Envío a domicilio</label></fieldset>
+<div id="pickupFields" class="field"><label for="pickup">Punto de entrega</label><select id="pickup"><option>San Mateo</option><option>Santa Rosa</option><option>San Bartolo</option><option>Cuajimalpa</option><option>El Yaqui</option><option>El Limbo Santa Fe</option></select></div>
+<div id="addressFields" class="hidden"><div class="field"><label for="postal">Código postal</label><input id="postal" inputmode="numeric" maxlength="5" placeholder="Ej. 05600"></div><div class="field"><label for="address">Calle, número, colonia y referencias</label><textarea id="address" rows="3"></textarea></div></div>
+<div class="field"><label for="deliveryDate">Día preferido</label><select id="deliveryDate"><option>Por confirmar con NODO</option><option>Sábado</option><option>Domingo</option></select></div>
+<fieldset><legend><strong>Forma de pago</strong></legend><label><input type="radio" name="payment" value="Efectivo" checked>Efectivo</label><label><input type="radio" name="payment" value="Transferencia">Transferencia</label><label><input type="radio" name="payment" value="Tarjeta (próximamente)">Tarjeta (próximamente)</label></fieldset>
+<div class="notice">La disponibilidad, fecha y costo de envío se confirman por WhatsApp. El pago con tarjeta aún no está habilitado.</div><button class="dark-btn checkout" onclick="placeOrder()">Enviar pedido por WhatsApp ↗</button></section></main><footer><strong>NODO</strong><p>Gracias por apoyar nuestro negocio 💛</p></footer>
 <script>
-const products = [
- {id:1,name:"Bolsa clásica",category:"Bolsas",price:299,emoji:"👜",colors:[["Negro","#171717"],["Rojo","#d62828"],["Amarillo","#ffd629"],["Morado","#8055a5"],["Blanco","#ffffff"]]},
- {id:2,name:"Bolsa mini",category:"Bolsas",price:249,emoji:"👛",colors:[["Negro","#171717"],["Rosa","#f4a6c1"],["Rojo","#d62828"]]},
- {id:3,name:"Vestido floreado",category:"Ropa",price:399,emoji:"👗",colors:[["Morado","#8055a5"],["Azul","#3987d8"],["Amarillo","#ffd629"],["Rosa","#f4a6c1"]]},
- {id:4,name:"Blusa básica",category:"Ropa",price:189,emoji:"👚",colors:[["Blanco","#ffffff"],["Negro","#171717"],["Azul","#3987d8"]]},
- {id:5,name:"Aretes",category:"Accesorios",price:89,emoji:"💎",colors:[["Dorado","#c49a32"],["Plateado","#c0c0c0"],["Rosa","#f4a6c1"]]},
- {id:6,name:"Calcetines",category:"Accesorios",price:75,emoji:"🧦",colors:[["Blanco","#ffffff"],["Negro","#171717"],["Rosa","#f4a6c1"]]},
- {id:7,name:"Perfume",category:"Perfumes",price:199,emoji:"🧴",colors:[["Dorado","#c49a32"],["Rosa","#f4a6c1"]]},
- {id:8,name:"Labial",category:"Belleza",price:89,emoji:"💄",colors:[["Rojo","#d62828"],["Rosa","#f4a6c1"],["Morado","#8055a5"]]}
+/* EDITA AQUÍ TUS PRODUCTOS. Precio y existencias son de ejemplo hasta que los cambies.
+   Para fotos, sube archivos a una carpeta 'fotos' del repositorio y escribe la ruta, por ejemplo 'fotos/bolsa-negra.jpg'.
+   Cada color tiene su propia imagen y stock: {nombre,hex,imagen,stock}.
+   NOTA: GitHub Pages no descuenta inventario compartido automáticamente; se necesita base de datos. */
+const categories=[['Todos','✨'],['Bolsas','👜'],['Monederos','👛'],['Pijamas','🌙'],['Calcetines mujer','🧦'],['Calcetines hombre','🧦'],['Monederos niños','🧸'],['Cosmetiqueras','💄'],['Mochilas','🎒'],['Calzones','🎀'],['Brasieres','🌸'],['Ropa','👗'],['Accesorios','💍'],['Otros','🎁']];
+const products=[
+{id:1,nombre:'Bolsa clásica (ejemplo)',categoria:'Bolsas',precio:299,emoji:'👜',variantes:[{nombre:'Negro',hex:'#171717',imagen:'',stock:10},{nombre:'Morado',hex:'#8055a5',imagen:'',stock:10},{nombre:'Blanco',hex:'#ffffff',imagen:'',stock:10}]},
+{id:2,nombre:'Calcetines (ejemplo)',categoria:'Calcetines hombre',precio:75,emoji:'🧦',variantes:[{nombre:'Blanco',hex:'#ffffff',imagen:'',stock:10},{nombre:'Negro',hex:'#171717',imagen:'',stock:0}]}
 ];
-const categories=["Todos",...new Set(products.map(p=>p.category))];
-let selectedCategory="Todos";
-let selections={};
-let cart=[];
-
-function money(n){return n.toLocaleString("es-MX",{style:"currency",currency:"MXN"})}
-
-function renderCategories(){
- document.getElementById("categories").innerHTML=categories.map(c=>
- `<button class="${c===selectedCategory?'active':''}" onclick="filterCategory('${c}')">${c}</button>`
- ).join("");
-}
-function filterCategory(c){selectedCategory=c;renderCategories();renderProducts()}
-function renderProducts(){
- const list=products.filter(p=>selectedCategory==="Todos"||p.category===selectedCategory);
- document.getElementById("products").innerHTML=list.map(p=>{
-  const chosen=selections[p.id]||p.colors[0][0];
-  return `<article class="card">
-   <div class="product-art">${p.emoji}</div>
-   <div class="card-content">
-    <div class="muted">${p.category}</div><h3>${p.name}</h3>
-    <div class="price">${money(p.price)}</div>
-    <div class="muted">Color: <strong>${chosen}</strong></div>
-    <div class="swatches">${p.colors.map(([name,color])=>
-      `<button class="swatch ${chosen===name?'selected':''}" title="${name}" aria-label="${name}" style="background:${color}" onclick="selectColor(${p.id},'${name}')"></button>`
-    ).join("")}</div>
-    <button class="btn add" onclick="addToCart(${p.id})">Agregar al carrito</button>
-   </div></article>`;
- }).join("");
-}
-function selectColor(id,color){selections[id]=color;renderProducts()}
-function addToCart(id){
- const p=products.find(x=>x.id===id), color=selections[id]||p.colors[0][0];
- const key=id+"-"+color;
- const existing=cart.find(x=>x.key===key);
- if(existing)existing.qty++;
- else cart.push({key,id,name:p.name,color,price:p.price,qty:1});
- renderCart();
-}
-function changeQty(key,delta){
- const item=cart.find(x=>x.key===key);
- if(item)item.qty+=delta;
- cart=cart.filter(x=>x.qty>0);
- renderCart();
-}
-function renderCart(){
- document.getElementById("cartCount").textContent=cart.reduce((s,p)=>s+p.qty,0);
- document.getElementById("cartItems").innerHTML=cart.length?cart.map(p=>
- `<div class="line"><div>${p.name}<br><span class="muted">Color: ${p.color} · ${money(p.price)}</span></div>
- <div><button class="small-button" onclick="changeQty('${p.key}',-1)">−</button> ${p.qty} <button class="small-button" onclick="changeQty('${p.key}',1)">+</button></div></div>`
- ).join(""):"Todavía no agregas productos.";
- document.getElementById("total").textContent=money(cart.reduce((s,p)=>s+p.price*p.qty,0));
-}
-function toggleAddress(){
- const home=document.querySelector('input[name="delivery"]:checked').value==="Envío a domicilio";
- document.getElementById("addressFields").classList.toggle("hidden",!home);
- document.getElementById("pickupFields").classList.toggle("hidden",home);
-}
-function findZone(){
- const cp=document.getElementById("postal").value.trim();
- const result=document.getElementById("zoneResult");
- if(cp.length!==5){result.textContent="Escribe los 5 dígitos de tu código postal.";return}
- result.textContent="Código postal capturado. La zona y disponibilidad se confirmarán con NODO.";
-}
-function placeOrder(){
- if(!cart.length){alert("Agrega al menos un producto al carrito.");return}
- const name=document.getElementById("customer").value.trim();
- const phone=document.getElementById("phone").value.trim();
- if(!name||!phone){alert("Escribe tu nombre y teléfono.");return}
- const delivery=document.querySelector('input[name="delivery"]:checked').value;
- const payment=document.querySelector('input[name="payment"]:checked').value;
- if(payment==="Tarjeta (por habilitar)"){alert("El pago con tarjeta todavía no está habilitado. Elige efectivo o transferencia por ahora.");return}
- let destination="";
- if(delivery==="Envío a domicilio"){
-  const cp=document.getElementById("postal").value.trim();
-  const address=document.getElementById("address").value.trim();
-  if(!/^\d{5}$/.test(cp)||!address){alert("Escribe un código postal válido de 5 dígitos y tu dirección completa.");return}
-  destination="Código postal: "+cp+"\nDirección: "+address;
- }else{
-  destination="Punto de entrega: "+document.getElementById("pickup").value;
- }
- const items=cart.map(p=>`${p.qty} x ${p.name} - ${p.color} - ${money(p.price*p.qty)}`).join("\n");
- const total=cart.reduce((s,p)=>s+p.price*p.qty,0);
- const date=document.getElementById("deliveryDate").value;
- const message=`Hola, NODO. Quiero realizar este pedido:\n\n${items}\n\nTotal de productos: ${money(total)}\nNombre: ${name}\nTeléfono: ${phone}\nEntrega: ${delivery}\n${destination}\nDía preferido: ${date}\nPago: ${payment}\n\n¿Me confirman disponibilidad y costo de entrega?`;
- window.open("https://wa.me/525513001744?text="+encodeURIComponent(message),"_blank");
-}
-renderCategories();
-renderProducts();
-renderCart();
-</script>
-</body>
-</html>
+let category='Todos',selected={},cart=[];
+const $=id=>document.getElementById(id);const money=n=>n.toLocaleString('es-MX',{style:'currency',currency:'MXN'});const product=id=>products.find(p=>p.id===id);const variant=p=>p.variantes[selected[p.id]??0];
+function renderCategories(){$('categories').innerHTML=categories.map(([name,icon])=>`<button class="${name===category?'active':''}" data-category="${name}">${icon} ${name}</button>`).join('');$('categories').querySelectorAll('button').forEach(b=>b.onclick=()=>{category=b.dataset.category;renderCategories();renderProducts()})}
+function renderProducts(){const list=products.filter(p=>category==='Todos'||p.categoria===category);$('products').innerHTML=list.length?list.map(p=>{const v=variant(p),remaining=Math.max(0,v.stock-cart.filter(i=>i.id===p.id&&i.color===v.nombre).reduce((s,i)=>s+i.qty,0));return `<article class="card"><div class="art">${v.imagen?`<img src="${v.imagen}" alt="${p.nombre} - ${v.nombre}" onerror="this.style.display='none';this.parentElement.append('📷')">`:p.emoji}</div><div class="content"><div class="muted">${p.categoria}</div><h3>${p.nombre}</h3><div class="price">${money(p.precio)}</div><p class="muted">Color: <b>${v.nombre}</b></p><div class="swatches">${p.variantes.map((c,i)=>`<button class="swatch ${(selected[p.id]??0)===i?'selected':''}" style="background:${c.hex}" data-id="${p.id}" data-index="${i}" title="${c.nombre}" aria-label="Ver ${c.nombre}"></button>`).join('')}</div><p class="muted">${remaining>0?'Disponible':'Agotado'}</p><button class="add" data-add="${p.id}" ${remaining<=0?'disabled':''}>${remaining>0?'Agregar al carrito':'No disponible'}</button></div></article>`}).join(''):'<p class="empty">Próximamente encontrarás productos en esta categoría 💛</p>';$('products').querySelectorAll('.swatch').forEach(b=>b.onclick=()=>{selected[Number(b.dataset.id)]=Number(b.dataset.index);renderProducts()});$('products').querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addToCart(Number(b.dataset.add)))}
+function addToCart(id){const p=product(id),v=variant(p),key=id+'|'+v.nombre,existing=cart.find(i=>i.key===key),qty=existing?.qty||0;if(qty>=Math.min(10,v.stock)){alert('No hay más unidades disponibles para agregar.');return}if(existing)existing.qty++;else cart.push({key,id,color:v.nombre,qty:1});renderCart();renderProducts()}
+function changeQty(key,delta){const item=cart.find(i=>i.key===key);if(!item)return;const p=product(item.id),v=p.variantes.find(x=>x.nombre===item.color);if(delta>0&&item.qty>=Math.min(10,v.stock)){alert('Máximo 10 unidades o las existencias disponibles.');return}item.qty+=delta;cart=cart.filter(i=>i.qty>0);renderCart();renderProducts()}
+function renderCart(){$('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0);$('cartItems').innerHTML=cart.length?cart.map(i=>{const p=product(i.id);return `<div class="line"><div><strong>${p.nombre}</strong><div class="muted">${i.color} · ${money(p.precio)} c/u</div></div><div><button class="qty" data-key="${i.key}" data-delta="-1">−</button> ${i.qty} <button class="qty" data-key="${i.key}" data-delta="1">+</button></div></div>`}).join(''):'Todavía no agregas productos.';$('total').textContent=money(cart.reduce((s,i)=>s+product(i.id).precio*i.qty,0));$('cartItems').querySelectorAll('[data-key]').forEach(b=>b.onclick=()=>changeQty(b.dataset.key,Number(b.dataset.delta)))}
+function toggleAddress(){const home=document.querySelector('input[name=delivery]:checked').value==='Envío a domicilio';$('addressFields').classList.toggle('hidden',!home);$('pickupFields').classList.toggle('hidden',home)}
+function placeOrder(){if(!cart.length){alert('Agrega productos al carrito.');return}const name=$('customer').value.trim(),phone=$('phone').value.trim();if(!name||!phone){alert('Escribe tu nombre y teléfono.');return}const delivery=document.querySelector('input[name=delivery]:checked').value,payment=document.querySelector('input[name=payment]:checked').value;if(payment.includes('próximamente')){alert('Por ahora elige efectivo o transferencia.');return}let destination='Punto de entrega: '+$('pickup').value;if(delivery==='Envío a domicilio'){const cp=$('postal').value.trim(),address=$('address').value.trim();if(!/^\d{5}$/.test(cp)||!address){alert('Escribe tu código postal de 5 dígitos y dirección completa.');return}destination='Código postal: '+cp+'\nDirección: '+address}const items=cart.map(i=>`${i.qty} x ${product(i.id).nombre} - ${i.color} - ${money(product(i.id).precio*i.qty)}`).join('\n'),total=cart.reduce((s,i)=>s+product(i.id).precio*i.qty,0);const message=`Hola, NODO. Quiero realizar este pedido:\n\n${items}\n\nTotal de productos: ${money(total)}\nNombre: ${name}\nTeléfono: ${phone}\nEntrega: ${delivery}\n${destination}\nDía preferido: ${$('deliveryDate').value}\nPago: ${payment}\n\n¿Me confirman disponibilidad y costo de entrega?`;window.open('https://wa.me/525513001744?text='+encodeURIComponent(message),'_blank')}
+renderCategories();renderProducts();renderCart();
+</script></body></html>
