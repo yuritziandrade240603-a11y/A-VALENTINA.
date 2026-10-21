@@ -21,8 +21,7 @@
    NOTA: GitHub Pages no descuenta inventario compartido automáticamente; se necesita base de datos. */
 const categories=[['Todos','✨'],['Bolsas','👜'],['Monederos','👛'],['Pijamas','🌙'],['Calcetines mujer','🧦'],['Calcetines hombre','🧦'],['Monederos niños','🧸'],['Cosmetiqueras','💄'],['Mochilas','🎒'],['Calzones','🎀'],['Brasieres','🌸'],['Ropa','👗'],['Accesorios','💍'],['Otros','🎁']];
 const products=[
-{id:1,nombre:'Bolsa clásica (ejemplo)',categoria:'Bolsas',precio:299,emoji:'👜',variantes:[{nombre:'Negro',hex:'#171717',imagen:'',stock:10},{nombre:'Morado',hex:'#8055a5',imagen:'',stock:10},{nombre:'Blanco',hex:'#ffffff',imagen:'',stock:10}]},
-{id:2,nombre:'Calcetines (ejemplo)',categoria:'Calcetines hombre',precio:75,emoji:'🧦',variantes:[{nombre:'Blanco',hex:'#ffffff',imagen:'',stock:10},{nombre:'Negro',hex:'#171717',imagen:'',stock:0}]}
+{id:1,nombre:'BOLSA COACH MICKEY MOUSE CON MUÑEQUERA',categoria:'Bolsas',precio:240,emoji:'👜',variantes:[{nombre:'Negro',hex:'#171717',imagen:'fotos/WhatsApp Image 2026-10-21 at 3.33.24 AM (1).jpeg',stock:1},{nombre:'Café',hex:'#795039',imagen:'fotos/WhatsApp Image 2026-10-21 at 3.33.25 AM (2).jpeg',stock:1}]},{id:2,nombre:'Calcetines (ejemplo)',categoria:'Calcetines hombre',precio:75,emoji:'🧦',variantes:[{nombre:'Blanco',hex:'#ffffff',imagen:'',stock:10},{nombre:'Negro',hex:'#171717',imagen:'',stock:0}]}
 ];
 let category='Todos',selected={},cart=[];
 const $=id=>document.getElementById(id);const money=n=>n.toLocaleString('es-MX',{style:'currency',currency:'MXN'});const product=id=>products.find(p=>p.id===id);const variant=p=>p.variantes[selected[p.id]??0];
