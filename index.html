@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NODO | Tienda en línea</title>
+<style>
+:root{--yellow:#ffd629;--black:#171717;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#fff;color:var(--black)}
+header{background:var(--yellow);padding:22px 6%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-size:35px;font-weight:900;letter-spacing:5px}
+header p{margin:4px 0;font-size:13px}
+button{cursor:pointer;border:0;border-radius:8px;padding:12px 16px;font-weight:bold}
+.cart{background:var(--black);color:white}
+.hero{padding:55px 6%;background:#f7f7f7}
+.hero small{font-weight:bold;letter-spacing:3px}
+.hero h1{font-size:clamp(36px,6vw,64px);max-width:650px;margin:15px 0}
+.hero p{line-height:1.6;color:#555}
+.section{padding:35px 6%}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px}
+.card{border:1px solid #eee;border-radius:15px;overflow:hidden;padding-bottom:18px}
+.product-img{height:170px;background:var(--yellow);display:grid;place-items:center;font-size:65px}
+.card h3,.card .price,.card .add{margin-left:16px;margin-right:16px}
+.price{font-size:20px;font-weight:bold}
+.add{width:calc(100% - 32px);background:var(--yellow);color:#111}
+#cart-items p{border-bottom:1px solid #ddd;padding:10px 0}
+.checkout{background:#20a464;color:white;width:100%;margin-top:12px}
+footer{background:var(--black);color:white;text-align:center;padding:28px}
+input,select{padding:12px;border:1px solid #ccc;border-radius:8px;width:100%;margin:6px 0 12px}
+#cart{background:#fafafa;border:1px solid #eee;border-radius:14px;padding:20px}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="logo">NODO.</div><p>Encuentra eso que va contigo.</p></div>
+  <button class="cart" onclick="document.getElementById('cart').scrollIntoView({behavior:'smooth'})">🛍️ Mi carrito (<span id="count">0</span>)</button>
+</header>
+<section class="hero">
+  <small>BIENVENIDA A NODO</small>
+  <h1>Pequeños detalles, grandes favoritos.</h1>
+  <p>Descubre tus próximos favoritos. Explora nuestro catálogo y arma tu pedido.</p>
+  <button style="background:#ffd629" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Ver catálogo ↓</button>
+</section>
+<section class="section" id="catalogo">
+  <h2>Descubre NODO</h2>
+  <p>Productos seleccionados para ti.</p>
+  <div class="products" id="products"></div>
+</section>
+<section class="section">
+  <h2>Tu carrito</h2>
+  <div id="cart">
+    <div id="cart-items">Tu carrito está vacío.</div>
+    <h3>Total: $<span id="total">0</span> MXN</h3>
+    <label for="customer">Tu nombre</label>
+    <input id="customer" placeholder="¿Cómo te llamas?">
+    <label for="delivery">Forma de entrega</label>
+    <select id="delivery"><option>Entrega local</option><option>Envío por paquetería (por confirmar)</option></select>
+    <label for="payment">Forma de pago</label>
+    <select id="payment"><option>Efectivo</option><option>Transferencia</option></select>
+    <button class="checkout" onclick="checkout()">Pedir por WhatsApp</button>
+    <p style="font-size:12px;color:#666">El costo de envío, disponibilidad y entrega se confirman por WhatsApp.</p>
+  </div>
+</section>
+<footer><div class="logo">NODO.</div><p>Gracias por comprar con nosotros 💛</p></footer>
+<script>
+const products=[
+{id:1,name:"Labial",price:89,emoji:"💄"},
+{id:2,name:"Accesorio",price:59,emoji:"🎀"},
+{id:3,name:"Calcetines",price:75,emoji:"🧦"},
+{id:4,name:"Perfume",price:199,emoji:"🌼"}
+];
+const cart=[];
+const money=n=>n.toLocaleString("es-MX");
+function renderProducts(){
+document.getElementById("products").innerHTML=products.map(p=>`
+<article class="card">
+<div class="product-img">${p.emoji}</div>
+<h3>${p.name}</h3><p class="price">$${money(p.price)} MXN</p>
+<button class="add" onclick="addToCart(${p.id})">Agregar al carrito</button>
+</article>`).join("");
+}
+function addToCart(id){
+cart.push(products.find(p=>p.id===id));renderCart();
+}
+function renderCart(){
+document.getElementById("count").textContent=cart.length;
+document.getElementById("total").textContent=money(cart.reduce((s,p)=>s+p.price,0));
+document.getElementById("cart-items").innerHTML=cart.length?cart.map((p,i)=>`<p>${p.emoji} ${p.name} — $${money(p.price)} <button onclick="removeItem(${i})">Quitar</button></p>`).join(""):"Tu carrito está vacío.";
+}
+function removeItem(i){cart.splice(i,1);renderCart();}
+function checkout(){
+if(!cart.length){alert("Agrega al menos un producto a tu carrito.");return;}
+const name=document.getElementById("customer").value.trim();
+if(!name){alert("Escribe tu nombre, por favor.");return;}
+const delivery=document.getElementById("delivery").value;
+const payment=document.getElementById("payment").value;
+const items=cart.map(p=>`- ${p.name}: $${money(p.price)} MXN`).join("\n");
+const total=cart.reduce((s,p)=>s+p.price,0);
+const message=`Hola, NODO. Quiero hacer un pedido.\nNombre: ${name}\n\nProductos:\n${items}\n\nTotal de productos: $${money(total)} MXN\nEntrega: ${delivery}\nPago: ${payment}\n\n¿Me confirman disponibilidad y costo de entrega?`;
+window.open("https://wa.me/525513001744?text="+encodeURIComponent(message),"_blank");
+}
+renderProducts();
+</script>
+</body>
+</html>
