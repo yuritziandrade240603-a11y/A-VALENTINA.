@@ -150,4 +150,785 @@ main {
 
 .price {
   font-size: 21px;
-  font-weight: 800
+  font-weight: 800;
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.swatch {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  border: 2px solid #bbb;
+}
+
+.swatch.selected {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+.add {
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--yellow);
+  font-weight: bold;
+}
+
+.add:disabled {
+  background: #eee;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.panel {
+  border: 1px solid #e5e5e5;
+  border-radius: 17px;
+  padding: 22px;
+  margin-top: 30px;
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.qty {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 6px 10px;
+  border-radius: 7px;
+}
+
+.field {
+  margin: 15px 0;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 7px;
+}
+
+input:not([type=radio]),
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 9px;
+  font: inherit;
+}
+
+fieldset {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  margin: 15px 0;
+  padding: 14px;
+}
+
+fieldset label {
+  font-weight: normal;
+  margin: 10px 0;
+}
+
+fieldset input {
+  margin-right: 8px;
+}
+
+.hidden {
+  display: none;
+}
+
+.notice {
+  background: #fff7d7;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.checkout {
+  width: 100%;
+  margin-top: 15px;
+}
+
+footer {
+  background: var(--yellow);
+  text-align: center;
+  padding: 28px;
+  margin-top: 30px;
+}
+
+.empty {
+  padding: 25px;
+  color: #777;
+  text-align: center;
+}
+
+.photo-gallery {
+  display: flex;
+  gap: 7px;
+  padding: 10px;
+  overflow-x: auto;
+}
+
+.photo-gallery img {
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.photo-gallery img:hover {
+  border: 2px solid var(--ink);
+}
+
+.photo-error {
+  font-size: 13px;
+  color: #777;
+  text-align: center;
+  padding: 20px;
+}
+
+@media(max-width:480px) {
+  .logo {
+    font-size: 27px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .content h3 {
+    font-size: 15px;
+  }
+
+  .price {
+    font-size: 18px;
+  }
+
+  .cart-btn {
+    padding: 10px;
+  }
+
+  .photo-gallery img {
+    width: 48px;
+    height: 48px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <div class="logo">A-VALENTINA.</div>
+    <div class="tag">DETALLES QUE ENAMORAN</div>
+  </div>
+
+  <button class="cart-btn"
+    onclick="document.getElementById('carrito').scrollIntoView({behavior:'smooth'})">
+    🛒 Carrito (<span id="cartCount">0</span>)
+  </button>
+</header>
+
+<section class="hero">
+  <small>BIENVENIDA A A-VALENTINA. ✨</small>
+
+  <h1>Encuentra eso que va contigo.</h1>
+
+  <p>
+    Detalles que enamoran, accesorios y mucho más.
+    Explora, elige tu color favorito y arma tu pedido.
+  </p>
+
+  <button class="yellow-btn"
+    onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">
+    Ver catálogo ↓
+  </button>
+</section>
+
+<main>
+
+<section id="catalogo">
+  <h2>Compra por categoría</h2>
+  <div id="categories" class="categories"></div>
+  <div id="products" class="grid"></div>
+</section>
+
+<section class="panel" id="carrito">
+  <h2>🛒 Tu carrito</h2>
+
+  <div id="cartItems">
+    Todavía no agregas productos.
+  </div>
+
+  <div class="line">
+    <strong>Total de productos</strong>
+    <strong id="total">$0.00</strong>
+  </div>
+</section>
+
+<section class="panel">
+
+  <h2>Finaliza tu pedido 💛</h2>
+
+  <p class="muted">
+    Completa tus datos y envíanos tu pedido por WhatsApp.
+  </p>
+
+  <div class="field">
+    <label for="customer">Nombre completo</label>
+    <input id="customer"
+      autocomplete="name"
+      placeholder="Tu nombre">
+  </div>
+
+  <div class="field">
+    <label for="phone">Teléfono / WhatsApp</label>
+    <input id="phone"
+      type="tel"
+      autocomplete="tel"
+      placeholder="Tu número">
+  </div>
+
+  <fieldset>
+    <legend><strong>Entrega</strong></legend>
+
+    <label>
+      <input type="radio"
+        name="delivery"
+        value="Punto de entrega"
+        checked
+        onchange="toggleAddress()">
+      Recoger en punto de entrega
+    </label>
+
+    <label>
+      <input type="radio"
+        name="delivery"
+        value="Envío a domicilio"
+        onchange="toggleAddress()">
+      Envío a domicilio
+    </label>
+  </fieldset>
+
+  <div id="pickupFields" class="field">
+    <label for="pickup">Punto de entrega</label>
+
+    <select id="pickup">
+      <option>San Mateo</option>
+      <option>Santa Rosa</option>
+      <option>San Bartolo</option>
+      <option>Cuajimalpa</option>
+      <option>El Yaqui</option>
+      <option>El Limbo Santa Fe</option>
+    </select>
+  </div>
+
+  <div id="addressFields" class="hidden">
+
+    <div class="field">
+      <label for="postal">Código postal</label>
+      <input id="postal"
+        inputmode="numeric"
+        maxlength="5"
+        placeholder="Ej. 05600">
+    </div>
+
+    <div class="field">
+      <label for="address">
+        Calle, número, colonia y referencias
+      </label>
+      <textarea id="address" rows="3"></textarea>
+    </div>
+
+  </div>
+
+  <div class="field">
+    <label for="deliveryDate">Día preferido</label>
+
+    <select id="deliveryDate">
+      <option>Por confirmar con A-VALENTINA.</option>
+      <option>Sábado</option>
+      <option>Domingo</option>
+    </select>
+  </div>
+
+  <fieldset>
+    <legend><strong>Forma de pago</strong></legend>
+
+    <label>
+      <input type="radio"
+        name="payment"
+        value="Efectivo"
+        checked>
+      Efectivo
+    </label>
+
+    <label>
+      <input type="radio"
+        name="payment"
+        value="Transferencia">
+      Transferencia
+    </label>
+
+    <label>
+      <input type="radio"
+        name="payment"
+        value="Tarjeta (próximamente)">
+      Tarjeta (próximamente)
+    </label>
+  </fieldset>
+
+  <div class="notice">
+    La disponibilidad, fecha y costo de envío se
+    confirman por WhatsApp. El pago con tarjeta
+    aún no está habilitado.
+  </div>
+
+  <button class="dark-btn checkout"
+    onclick="placeOrder()">
+    Enviar pedido por WhatsApp ↗️
+  </button>
+
+</section>
+
+</main>
+
+<footer>
+  <strong>A-VALENTINA.</strong>
+  <p>Gracias por apoyar nuestro negocio 💛</p>
+</footer>
+
+<script>
+
+/*
+  CATÁLOGO A-VALENTINA.
+
+  Las fotografías se encuentran en:
+  fotos/bolsa-coach-mickey/
+
+  Las existencias se muestran en el catálogo.
+  GitHub Pages no descuenta automáticamente
+  inventario entre distintos compradores.
+*/
+
+const categories = [
+  ['Todos','✨'],
+  ['Bolsas','👜'],
+  ['Monederos','👛'],
+  ['Pijamas','🌙'],
+  ['Calcetines mujer','🧦'],
+  ['Calcetines hombre','🧦'],
+  ['Monederos niños','🧸'],
+  ['Cosmetiqueras','💄'],
+  ['Mochilas','🎒'],
+  ['Calzones','🎀'],
+  ['Brasieres','🌸'],
+  ['Ropa','👗'],
+  ['Accesorios','💍'],
+  ['Otros','🎁']
+];
+
+const products = [
+  {
+    id: 1,
+    nombre: 'BOLSA COACH MICKEY MOUSE CON MUÑEQUERA',
+    categoria: 'Bolsas',
+    precio: 240,
+
+    variantes: [
+      {
+        nombre: 'Negro',
+        hex: '#171717',
+        stock: 1,
+        imagenes: [
+          'fotos/bolsa-coach-mickey/negra-frente.jpeg',
+          'fotos/bolsa-coach-mickey/negra-atras.jpeg',
+          'fotos/bolsa-coach-mickey/negra-lado.jpeg'
+        ]
+      },
+      {
+        nombre: 'Café',
+        hex: '#795039',
+        stock: 1,
+        imagenes: [
+          'fotos/bolsa-coach-mickey/cafe-frente.jpeg',
+          'fotos/bolsa-coach-mickey/cafe-atras.jpeg',
+          'fotos/bolsa-coach-mickey/cafe-lado.jpeg'
+        ]
+      }
+    ]
+  }
+];
+
+let category = 'Todos';
+let selected = {};
+let selectedPhotos = {};
+let cart = [];
+
+const $ = id => document.getElementById(id);
+
+const money = n =>
+  n.toLocaleString('es-MX', {
+    style: 'currency',
+    currency: 'MXN'
+  });
+
+const product = id =>
+  products.find(p => p.id === id);
+
+const variant = p =>
+  p.variantes[selected[p.id] ?? 0];
+
+function renderCategories() {
+  $('categories').innerHTML = categories.map(
+    ([name,icon]) => `
+      <button
+        class="${name === category ? 'active' : ''}"
+        data-category="${name}">
+        ${icon} ${name}
+      </button>
+    `
+  ).join('');
+
+  $('categories').querySelectorAll('button')
+    .forEach(b => {
+      b.onclick = () => {
+        category = b.dataset.category;
+        renderCategories();
+        renderProducts();
+      };
+    });
+}
+
+function renderProducts() {
+  const list = products.filter(
+    p => category === 'Todos' || p.categoria === category
+  );
+
+  $('products').innerHTML = list.length
+    ? list.map(p => {
+        const v = variant(p);
+
+        const photoIndex = selectedPhotos[p.id] ?? 0;
+        const mainPhoto = v.imagenes[photoIndex] || v.imagenes[0];
+
+        const inCart = cart
+          .filter(i => i.id === p.id && i.color === v.nombre)
+          .reduce((s,i) => s + i.qty, 0);
+
+        const remaining = Math.max(0, v.stock - inCart);
+
+        return `
+          <article class="card">
+
+            <div class="art">
+              <img
+                src="${mainPhoto}"
+                alt="${p.nombre} - ${v.nombre}"
+                onerror="this.style.display='none';
+                this.parentElement.innerHTML='<span class=photo-error>Fotografía no disponible</span>'">
+            </div>
+
+            <div class="photo-gallery">
+              ${v.imagenes.map((foto,index) => `
+                <img
+                  src="${foto}"
+                  alt="Vista ${index + 1} de ${v.nombre}"
+                  data-photo-id="${p.id}"
+                  data-photo-index="${index}"
+                  onerror="this.style.display='none'">
+              `).join('')}
+            </div>
+
+            <div class="content">
+
+              <div class="muted">${p.categoria}</div>
+
+              <h3>${p.nombre}</h3>
+
+              <div class="price">${money(p.precio)}</div>
+
+              <p class="muted">
+                Color: <b>${v.nombre}</b>
+              </p>
+
+              <div class="swatches">
+                ${p.variantes.map((c,i) => `
+                  <button
+                    class="swatch ${(selected[p.id] ?? 0) === i ? 'selected' : ''}"
+                    style="background:${c.hex}"
+                    data-id="${p.id}"
+                    data-index="${i}"
+                    title="${c.nombre}"
+                    aria-label="Ver color ${c.nombre}">
+                  </button>
+                `).join('')}
+              </div>
+
+              <p class="muted">
+                ${remaining > 0
+                  ? `Disponible: ${remaining}`
+                  : 'Agotado'}
+              </p>
+
+              <button
+                class="add"
+                data-add="${p.id}"
+                ${remaining <= 0 ? 'disabled' : ''}>
+                ${remaining > 0
+                  ? 'Agregar al carrito'
+                  : 'No disponible'}
+              </button>
+
+            </div>
+
+          </article>
+        `;
+      }).join('')
+    : '<p class="empty">Próximamente encontrarás productos en esta categoría 💛</p>';
+
+  $('products').querySelectorAll('.swatch')
+    .forEach(b => {
+      b.onclick = () => {
+        const id = Number(b.dataset.id);
+        selected[id] = Number(b.dataset.index);
+        selectedPhotos[id] = 0;
+        renderProducts();
+      };
+    });
+
+  $('products').querySelectorAll('[data-photo-id]')
+    .forEach(img => {
+      img.onclick = () => {
+        const id = Number(img.dataset.photoId);
+        selectedPhotos[id] = Number(img.dataset.photoIndex);
+        renderProducts();
+      };
+    });
+
+  $('products').querySelectorAll('[data-add]')
+    .forEach(b => {
+      b.onclick = () =>
+        addToCart(Number(b.dataset.add));
+    });
+}
+
+function addToCart(id) {
+  const p = product(id);
+  const v = variant(p);
+
+  const key = id + '|' + v.nombre;
+
+  const existing = cart.find(i => i.key === key);
+  const qty = existing?.qty || 0;
+
+  if(qty >= Math.min(10, v.stock)) {
+    alert('No hay más unidades disponibles para agregar.');
+    return;
+  }
+
+  if(existing) {
+    existing.qty++;
+  } else {
+    cart.push({
+      key,
+      id,
+      color: v.nombre,
+      qty: 1
+    });
+  }
+
+  renderCart();
+  renderProducts();
+}
+
+function changeQty(key,delta) {
+  const item = cart.find(i => i.key === key);
+
+  if(!item) return;
+
+  const p = product(item.id);
+  const v = p.variantes.find(
+    x => x.nombre === item.color
+  );
+
+  if(delta > 0 &&
+     item.qty >= Math.min(10,v.stock)) {
+    alert('Máximo 10 unidades o las existencias disponibles.');
+    return;
+  }
+
+  item.qty += delta;
+
+  cart = cart.filter(i => i.qty > 0);
+
+  renderCart();
+  renderProducts();
+}
+
+function renderCart() {
+  $('cartCount').textContent =
+    cart.reduce((s,i) => s + i.qty,0);
+
+  $('cartItems').innerHTML = cart.length
+    ? cart.map(i => {
+        const p = product(i.id);
+
+        return `
+          <div class="line">
+            <div>
+              <strong>${p.nombre}</strong>
+              <div class="muted">
+                ${i.color} · ${money(p.precio)} c/u
+              </div>
+            </div>
+
+            <div>
+              <button class="qty"
+                data-key="${i.key}"
+                data-delta="-1">−</button>
+
+              ${i.qty}
+
+              <button class="qty"
+                data-key="${i.key}"
+                data-delta="1">+</button>
+            </div>
+          </div>
+        `;
+      }).join('')
+    : 'Todavía no agregas productos.';
+
+  $('total').textContent = money(
+    cart.reduce(
+      (s,i) => s + product(i.id).precio * i.qty,
+      0
+    )
+  );
+
+  $('cartItems').querySelectorAll('[data-key]')
+    .forEach(b => {
+      b.onclick = () =>
+        changeQty(
+          b.dataset.key,
+          Number(b.dataset.delta)
+        );
+    });
+}
+
+function toggleAddress() {
+  const home =
+    document.querySelector(
+      'input[name=delivery]:checked'
+    ).value === 'Envío a domicilio';
+
+  $('addressFields').classList.toggle('hidden',!home);
+  $('pickupFields').classList.toggle('hidden',home);
+}
+
+function placeOrder() {
+  if(!cart.length) {
+    alert('Agrega productos al carrito.');
+    return;
+  }
+
+  const name = $('customer').value.trim();
+  const phone = $('phone').value.trim();
+
+  if(!name || !phone) {
+    alert('Escribe tu nombre y teléfono.');
+    return;
+  }
+
+  const delivery = document.querySelector(
+    'input[name=delivery]:checked'
+  ).value;
+
+  const payment = document.querySelector(
+    'input[name=payment]:checked'
+  ).value;
+
+  if(payment.includes('próximamente')) {
+    alert('Por ahora elige efectivo o transferencia.');
+    return;
+  }
+
+  let destination =
+    'Punto de entrega: ' + $('pickup').value;
+
+  if(delivery === 'Envío a domicilio') {
+    const cp = $('postal').value.trim();
+    const address = $('address').value.trim();
+
+    if(!/^\d{5}$/.test(cp) || !address) {
+      alert('Escribe tu código postal de 5 dígitos y dirección completa.');
+      return;
+    }
+
+    destination =
+      'Código postal: ' + cp +
+      '\nDirección: ' + address;
+  }
+
+  const items = cart.map(i =>
+    `${i.qty} x ${product(i.id).nombre} - ${i.color} - ${money(product(i.id).precio * i.qty)}`
+  ).join('\n');
+
+  const total = cart.reduce(
+    (s,i) => s + product(i.id).precio * i.qty,
+    0
+  );
+
+  const message =
+`Hola, A-VALENTINA. Quiero realizar este pedido:
+
+${items}
+
+Total de productos: ${money(total)}
+Nombre: ${name}
+Teléfono: ${phone}
+Entrega: ${delivery}
+${destination}
+Día preferido: ${$('deliveryDate').value}
+Pago: ${payment}
+
+¿Me confirman disponibilidad y costo de entrega?`;
+
+  window.open(
+    'https://wa.me/525513001744?text=' +
+    encodeURIComponent(message),
+    '_blank'
+  );
+}
+
+renderCategories();
+renderProducts();
+renderCart();
+
+</script>
+
+</body>
+</html>
