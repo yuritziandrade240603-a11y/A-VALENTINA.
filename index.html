@@ -535,20 +535,10 @@ footer {
 */
 
 const categories = [
-  ['Todos','✨'],
-  ['Bolsas','👜'],
-  ['Monederos','👛'],
-  ['Pijamas','🌙'],
-  ['Calcetines mujer','🧦'],
-  ['Calcetines hombre','🧦'],
-  ['Monederos niños','🧸'],
-  ['Cosmetiqueras','💄'],
-  ['Mochilas','🎒'],
-  ['Calzones','🎀'],
-  ['Brasieres','🌸'],
-  ['Ropa','👗'],
-  ['Accesorios','💍'],
-  ['Otros','🎁']
+  ['Todos', ''],
+  ['Mujer', ''],
+  ['Hombre', ''],
+  ['Niños', '']
 ];
 
 const products = [
@@ -556,6 +546,7 @@ const products = [
     id: 1,
     nombre: 'BOLSA COACH MICKEY MOUSE CON MUÑEQUERA',
     categoria: 'Bolsas',
+    departamento: 'Mujer',
     precio: 240,
 
     variantes: [
@@ -625,7 +616,7 @@ function renderCategories() {
 
 function renderProducts() {
   const list = products.filter(
-    p => category === 'Todos' || p.categoria === category
+    p => category === 'Todos' || p.departamento === category
   );
 
   $('products').innerHTML = list.length
