@@ -595,7 +595,7 @@ const variant = p =>
 
 function renderCategories() {
   $('categories').innerHTML = categories.map(
-    ([name,icon]) => `
+    ([name]) => `
       <button
         class="${name === category ? 'active' : ''}"
         data-category="${name}">
