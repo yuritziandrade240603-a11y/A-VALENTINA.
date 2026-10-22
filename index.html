@@ -609,6 +609,8 @@ function renderCategories() {
       b.onclick = () => {
         category = b.dataset.category;
         renderCategories();
+        departamentoSeleccionado = 'Todos';
+renderDepartamentos();
         renderProducts();
       };
     });
