@@ -613,10 +613,64 @@ function renderCategories() {
       };
     });
 }
+const departamentos = {
+  Mujer: [
+    'Bolsas',
+    'Mochilas',
+    'Carteras y monederos',
+    'Ropa',
+    'Ropa interior',
+    'Pijamas',
+    'Calcetines',
+    'Cosmetiqueras',
+    'Accesorios'
+  ],
+  Hombre: [
+    'Ropa',
+    'Ropa interior',
+    'Calcetines',
+    'Carteras',
+    'Mochilas',
+    'Accesorios'
+  ],
+  Niños: [
+    'Ropa',
+    'Pijamas',
+    'Calcetines',
+    'Mochilas',
+    'Accesorios'
+  ]
+};
+  
 
+  let departamentoSeleccionado = 'Todos';
+
+function renderDepartamentos() {
+  let contenedor = document.getElementById('departamentos');
+
+  if (!contenedor) return;
+
+  const opciones = departamentos[category] || [];
+
+  contenedor.innerHTML = opciones.map(nombre => `
+    <button
+      class="${departamentoSeleccionado === nombre ? 'active' : ''}"
+      onclick="seleccionarDepartamento('${nombre}')">
+      ${nombre}
+    </button>
+  `).join('');
+}
+
+function seleccionarDepartamento(nombre) {
+  departamentoSeleccionado = nombre;
+  renderDepartamentos();
+  renderProducts();
+}
 function renderProducts() {
   const list = products.filter(
-    p => category === 'Todos' || p.departamento === category
+    p =>
+  (category === 'Todos' || p.departamento === category) &&
+  (departamentoSeleccionado === 'Todos' || p.categoria === departamentoSeleccionado)
   );
 
   $('products').innerHTML = list.length
@@ -916,6 +970,7 @@ Pago: ${payment}
 }
 
 renderCategories();
+  renderDepartamentos();
 renderProducts();
 renderCart();
 
