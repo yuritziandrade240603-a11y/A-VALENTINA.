@@ -892,7 +892,7 @@ function renderProducts() {
         const v = variant(p);
 
         const photoIndex = selectedPhotos[p.id] ?? 0;
-        const mainPhoto = v.imagenes[photoIndex] || v.imagenes[0];
+        const mainPhoto = v.imagenes[0];
 
         const inCart = cart
           .filter(i => i.id === p.id && i.color === v.nombre)
